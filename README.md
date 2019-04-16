@@ -74,5 +74,11 @@ If a container has an exited status after a few seconds, it's likely that your c
 ### IntelliJ
 [Follow these instructions](https://www.jetbrains.com/help/idea/gradle.html#gradle_import) to import the `scsb` repo project from its `gradle.build` file.
 
-## Running tests
-(TODO: Need guidance from HTC on this.)
+## Running unit tests
+### Configuring IntelliJ to run tests
+Click the `Run` menu and then `Edit Configurations...`. You should have a Gradle build listed, with `BaseTestCase` and `BaseControllerUT` listed beneath. If not, click the `+` button to add a new Gradle configuration.
+
+### Running unit tests
+Click the `Run` menu and then `Run 'BaseTestCase'`. If everything is configured correctly, the test should all run successfully.
+
+(TODO: Need guidance from HTC on whether this is the correct configuration.)
