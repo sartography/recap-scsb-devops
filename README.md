@@ -2,21 +2,20 @@
 
 ## Prepare your environment for local development
 Clone each of the SCSB repositories, along with this one, to a single parent directory, so your directory looks like this:
-```
-[PROJ_DIR]
-  |- cucumber-automation/
-  |- docker/
-  |- performance-test/
-  |- scsb/
-  |- scsb-batch-scheduler/
-  |- scsb-cas/
-  |- scsb-circ/
-  |- scsb-etl/
-  |- scsb-shiro/
-  |- scsb-solr/
-  |- scsb-solr-client/
-  |- scsb-ui/
-```
+```bash
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-circ.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-ui.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-etl.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-solr-client.git
+git clone git@github.com:ResearchCollectionsAndPreservation/cucumber-automation.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-shiro.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-cas.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-batch-scheduler.git
+git clone git@github.com:ResearchCollectionsAndPreservation/performance-test.git
+git clone git@github.com:ResearchCollectionsAndPreservation/scsb-solr.git
+git clone https://github.com/sartography/recap-scsb-devops.git
+```	      
 
 Then add another directory called `data`, where all the database and configuration files will go:
 ```bash
@@ -41,7 +40,7 @@ Then navigate up to the `data` directory and create a symbolic link from `/recap
 cd ..
 pwd
 [PROJ_DIR]/data
-sudo ln -s . /recap-vol
+sudo ln -s [PROJ_DIR]/data /recap-vol
 ```
 
 ## Start the docker containers
@@ -51,7 +50,7 @@ cd ..
 pwd
 [PROJ_DIR]
 cd recap-scsb-devops
-./start.sh
+sudo ./start.sh
 ```
 
 If all the containers are running properly, you should be able to run the following command and see all the containers running with no errors or "Exited" statuses:
