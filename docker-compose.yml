@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  scsb-mysql:
+    build: scsb-mysql/
+    ports:
+      - "3307:3306"
+  scsb-activemq:
+    build: scsb-activemq/
+    depends_on:
+      - scsb-mysql
+    ports:
+      - "8162:8161"
+      - "61616:61616"
+      - "1099:1099"
+    environment:
+      - "DB_URL=jdbc:mysql://scsb-mysql:3306/recapactivemq?relaxAutoCommit=true"
+      - "DB_USERNAME=recap"
+      - "DB_PASSWORD=recap"
+      - "USERS=admin: admin, admin"
+  scsb-solr-server:
+    build: scsb-solr-server
+    depends_on:
+      - scsb-mysql
+    ports:
+      - "8984:8983"
+    volumes:
+      - ./data/solr-data:/var/data/solr
+    environment:
+      - "ENV=-m 4g"
+  scsb-solr-client:
+    build: scsb-solr-client
+    depends_on:
+      - scsb-mysql
+      - scsb-solr-server
+      - scsb-activemq
+    ports:
+      - "9094:9093"
+    volumes:
+      - ./data:/recap-vol
+    environment:
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
+
+
+
+#  web:
+#    build: .
+#    command: python manage.py runserver 0.0.0.0:8000
+#    volumes:
+#      - .:/code
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - db
