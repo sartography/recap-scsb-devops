@@ -2,11 +2,15 @@ version: '3'
 
 services:
   scsb-mysql:
-    build: scsb-mysql/
+    build: ../docker/scsb-mysql/
     ports:
       - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
   scsb-activemq:
-    build: scsb-activemq/
+    build: ../docker/scsb-activemq/
     depends_on:
       - scsb-mysql
     ports:
@@ -19,17 +23,17 @@ services:
       - "DB_PASSWORD=recap"
       - "USERS=admin: admin, admin"
   scsb-solr-server:
-    build: scsb-solr-server
+    build: ../docker/scsb-solr-server
     depends_on:
       - scsb-mysql
     ports:
       - "8984:8983"
     volumes:
-      - ./data/solr-data:/var/data/solr
+      - ../data/solr-data:/var/data/solr
     environment:
       - "ENV=-m 4g"
   scsb-solr-client:
-    build: scsb-solr-client
+    build: ../docker/scsb-solr-client
     depends_on:
       - scsb-mysql
       - scsb-solr-server
@@ -37,10 +41,9 @@ services:
     ports:
       - "9094:9093"
     volumes:
-      - ./data:/recap-vol
+      - ../data:/recap-vol
     environment:
       - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
-
 
 
 #  web:
