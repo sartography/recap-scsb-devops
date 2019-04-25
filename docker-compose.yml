@@ -1,6 +1,13 @@
 version: '3'
 
 services:
+  scsb-sftp:
+    image: atmoz/sftp
+    volumes:
+        - ./data/solr-data:/home/recap/upload
+    ports:
+        - "2222:22"
+    command: recap:recap:1001
   scsb-mysql:
     build: ../docker/scsb-mysql/
     ports:
