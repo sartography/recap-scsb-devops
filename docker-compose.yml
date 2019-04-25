@@ -4,8 +4,8 @@ services:
   scsb-sftp:
     image: atmoz/sftp
     volumes:
-        - ./ssh_keys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
-        - ./ssh_keys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
+        - ./ssh_keys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
+        - ./ssh_keys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key:ro
         - ./data/solr-data:/home/recap/upload
         - ~/.ssh/id_rsa.pub:/home/recap/.ssh/keys/id_rsa.pub:ro
     ports:
@@ -42,7 +42,7 @@ services:
       - ../data/solr-data:/var/data/solr
     environment:
       - "ENV=-m 4g"
-  scsb-solr-client:
+#  scsb-solr-client:
     build: ../docker/scsb-solr-client
     depends_on:
       - scsb-mysql
