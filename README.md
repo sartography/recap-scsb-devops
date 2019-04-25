@@ -53,12 +53,13 @@ cp ../../scsb/src/main/resources/application.properties .
 cp ../../docker/scsb-log4j/* .
 ```
 
-Then navigate up to the `data` directory and create a symbolic link from `/recap-vol` to the data directory:
+Then navigate up to the `data` directory and create symbolic links from `/recap-vol` and `/data` to the data directory:
 ```bash
 cd ..
 pwd
 [PROJ_DIR]/data
 sudo ln -s [PROJ_DIR]/data /recap-vol
+sudo ln -s [PROJ_DIR]/data data
 ```
 
 ## Start the docker containers
