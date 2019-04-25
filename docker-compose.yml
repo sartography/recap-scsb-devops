@@ -4,10 +4,13 @@ services:
   scsb-sftp:
     image: atmoz/sftp
     volumes:
+        - ./ssh_keys/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
+        - ./ssh_keys/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
         - ./data/solr-data:/home/recap/upload
+        - ~/.ssh/id_rsa.pub:/home/recap/.ssh/keys/id_rsa.pub:ro
     ports:
         - "2222:22"
-    command: recap:recap:1001
+    command: recap::1001
   scsb-mysql:
     build: ../docker/scsb-mysql/
     ports:

@@ -14,13 +14,31 @@ git clone git@github.com:ResearchCollectionsAndPreservation/scsb-cas.git
 git clone git@github.com:ResearchCollectionsAndPreservation/scsb-batch-scheduler.git
 git clone git@github.com:ResearchCollectionsAndPreservation/performance-test.git
 git clone git@github.com:ResearchCollectionsAndPreservation/scsb-solr.git
-git clone https://github.com/sartography/recap-scsb-devops.git
+git clone git@github.com:ResearchCollectionsAndPreservation/docker.git
 ```	      
 
 Then add another directory called `data`, where all the database and configuration files will go:
 ```bash
 mkdir data
 ```
+
+## We Use Docker-Compose
+
+* Install docker following this guide:  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
+* Install docker-compose following this guide: https://docs.docker.com/compose/install/
+* on linux after installed docker-compose, I had to "chmod 666 /var/run/docker.sock" 
+
+# Start up Docker-Compose to create base services (mysql, solr, sftp, activemq)
+```bash
+docker-compose up
+```
+
+# Is it all up?
+You can verify that the sftp server is responding with:
+```bash
+ sftp -P 2222 recap@localhost
+``` 
+
 
 Navigate to the `data` directory and create a `config` directory:
 ```bash
