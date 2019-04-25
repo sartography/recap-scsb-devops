@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   scsb-sftp:
@@ -17,6 +17,7 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
       retries: 10
+      start_period: 20s
   scsb-activemq:
     build: ../docker/scsb-activemq/
     depends_on:
@@ -37,21 +38,22 @@ services:
     ports:
       - "8984:8983"
     volumes:
-      - ../data/solr-data:/var/data/solr
+      - ./data/solr-data:/var/data/solr
     environment:
       - "ENV=-m 4g"
-  # scsb-solr-client:
-  #   build: ../docker/scsb-solr-client
-  #   depends_on:
-  #     - scsb-mysql
-  #     - scsb-solr-server
-  #     - scsb-activemq
-  #   ports:
-  #     - "9094:9093"
-  #   volumes:
-  #     - ../data:/recap-vol
-  #   environment:
-  #     - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
+  scsb-solr-client:
+    build: ../docker/scsb-solr-client
+    depends_on:
+      - scsb-mysql
+      - scsb-solr-server
+      - scsb-activemq
+    command: ["./wait-for-it.sh", "scsb-mysql:3306", "--", "echo", "-e", "'\n\n\n*** DONE WAITING ***\n\n\n'"]
+    ports:
+      - "9094:9093"
+    volumes:
+      - ./data:/recap-vol
+    environment:
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
 
 
 #  web:
