@@ -3,18 +3,18 @@
 ## Prepare your environment for local development
 Clone each of the SCSB repositories, along with this one, to a single parent directory, so your directory looks like this:
 ```bash
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-circ.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-ui.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-etl.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-solr-client.git
-git clone git@github.com:ResearchCollectionsAndPreservation/cucumber-automation.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-shiro.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-cas.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-batch-scheduler.git
-git clone git@github.com:ResearchCollectionsAndPreservation/performance-test.git
-git clone git@github.com:ResearchCollectionsAndPreservation/scsb-solr.git
-git clone git@github.com:ResearchCollectionsAndPreservation/docker.git
+git clone git@github.com:sartography/recap-scsb-circ.git
+git clone git@github.com:sartography/recap-scsb-ui.git
+git clone git@github.com:sartography/recap-scsb.git
+git clone git@github.com:sartography/recap-scsb-etl.git
+git clone git@github.com:sartography/recap-scsb-solr-client.git
+git clone git@github.com:sartography/recap-cucumber-automation.git
+git clone git@github.com:sartography/recap-scsb-shiro.git
+git clone git@github.com:sartography/recap-scsb-cas.git
+git clone git@github.com:sartography/recap-scsb-batch-scheduler.git
+git clone git@github.com:sartography/recap-performance-test.git
+git clone git@github.com:sartography/recap-scsb-solr.git
+git clone git@github.com:sartography/recap-docker.git
 ```	      
 
 Then add another directory called `data`, where all the database and configuration files will go:
