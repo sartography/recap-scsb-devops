@@ -17,18 +17,24 @@ git clone git@github.com:sartography/recap-scsb-solr.git
 git clone git@github.com:sartography/recap-docker.git
 ```	      
 
-Then add another directory called `data`, where all the database and configuration files will go:
-```bash
-mkdir data
-```
-
 ## We Use Docker-Compose
 
 * Install docker following this guide:  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 * Install docker-compose following this guide: https://docs.docker.com/compose/install/
 * on linux after installed docker-compose, I had to "chmod 666 /var/run/docker.sock" 
 
-# Start up Docker-Compose to create base services (mysql, solr, sftp, activemq)
+Then create symbolic links from `/recap-vol` and `/data` to the data directory:
+```bash
+sudo ln -s [PROJ_DIR]/recap-scsb-devops/data /recap-vol
+sudo ln -s [PROJ_DIR]/recap-scsb-devops/data /data
+```
+
+# Build the containers via `docker-compose`
+```bash
+docker-compose build
+```
+
+# Start up the docker containers
 ```bash
 docker-compose up
 ```
@@ -36,39 +42,13 @@ docker-compose up
 # Is it all up?
 You can verify that the sftp server is responding with:
 ```bash
- sftp -P 2222 recap@localhost
+sftp -P 2222 recap@localhost
 ``` 
-
-
-Navigate to the `data` directory and create a `config` directory:
-```bash
-cd data
-mkdir config
-```
-
-Navigate to the `config` directory and copy the following files to it:
-```bash
-cd config
-cp ../../scsb/src/main/resources/application.properties .
-cp ../../docker/scsb-log4j/* .
-```
-
-Then navigate up to the `data` directory and create symbolic links from `/recap-vol` and `/data` to the data directory:
-```bash
-cd ..
-pwd
-[PROJ_DIR]/data
-sudo ln -s [PROJ_DIR]/data /recap-vol
-sudo ln -s [PROJ_DIR]/data data
-```
 
 ## Start the docker containers
 Navigate up to the project directory, then to the directory for this repository. Then run the `start.sh` script to start up all the docker containers needed for SCSB.
 ```bash
-cd ..
-pwd
-[PROJ_DIR]
-cd recap-scsb-devops
+cd [PROJ_DIR]/recap-scsb-devops
 sudo ./start.sh
 ```
 
@@ -86,10 +66,13 @@ e890b575e08f        scsb-activemq       "/opt/startup.sh"        42 seconds ago 
 ```
 
 If a container has an exited status after a few seconds, it's likely that your configuration is incorrect.
-(TODO: Need guidance from HTC on troubleshooting this.)
 
 ## Set up your IDE
 ### IntelliJ
+
+#### Spring Boot
+Make sure you have the Spring Boot plugin installed and enabled. Navigate to `Preferences... > Plugins > Installed` to verify that Spring Boot support is listed and checked.
+
 [Follow these instructions](https://www.jetbrains.com/help/idea/gradle.html#gradle_import) to import the `scsb` repo project from its `gradle.build` file.
 
 ## Running unit tests
@@ -98,5 +81,3 @@ Click the `Run` menu and then `Edit Configurations...`. You should have a Gradle
 
 ### Running unit tests
 Click the `Run` menu and then `Run 'BaseTestCase'`. If everything is configured correctly, the test should all run successfully.
-
-(TODO: Need guidance from HTC on whether this is the correct configuration.)
