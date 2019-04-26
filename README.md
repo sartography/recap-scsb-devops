@@ -15,19 +15,24 @@ git clone git@github.com:sartography/recap-scsb-batch-scheduler.git
 git clone git@github.com:sartography/recap-performance-test.git
 git clone git@github.com:sartography/recap-scsb-solr.git
 git clone git@github.com:sartography/recap-docker.git
-```	      
+```
 
-## We Use Docker-Compose
-
+# We Use Docker-Compose
 * Install docker following this guide:  https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 * Install docker-compose following this guide: https://docs.docker.com/compose/install/
 * on linux after installed docker-compose, I had to "chmod 666 /var/run/docker.sock" 
 
-Then create symbolic links from `/recap-vol` and `/data` to the data directory:
+
+# Create some (less than ideal) directories in Root. :-(
+FIXME:  In order for some of the configration files we inherited from HTC to work correctly, we found we have to create symbolic links from `/recap-vol` and `/data` to the data directory:
 ```bash
-sudo ln -s [PROJ_DIR]/recap-scsb-devops/data /recap-vol
-sudo ln -s [PROJ_DIR]/recap-scsb-devops/data /data
+cd ..
+pwd
+[PROJ_DIR]/data
+sudo ln -s [PROJ_DIR]/data /recap-vol
+sudo ln -s [PROJ_DIR]/data data
 ```
+(we plan to fix this at some point)
 
 # Build the containers via `docker-compose`
 ```bash
@@ -39,18 +44,6 @@ docker-compose build
 docker-compose up
 ```
 
-# Is it all up?
-You can verify that the sftp server is responding with:
-```bash
-sftp -P 2222 recap@localhost
-``` 
-
-## Start the docker containers
-Navigate up to the project directory, then to the directory for this repository. Then run the `start.sh` script to start up all the docker containers needed for SCSB.
-```bash
-cd [PROJ_DIR]/recap-scsb-devops
-sudo ./start.sh
-```
 
 If all the containers are running properly, you should be able to run the following command and see all the containers running with no errors or "Exited" statuses:
 ```bash
@@ -67,13 +60,43 @@ e890b575e08f        scsb-activemq       "/opt/startup.sh"        42 seconds ago 
 
 If a container has an exited status after a few seconds, it's likely that your configuration is incorrect.
 
-## Set up your IDE
-### IntelliJ
 
-#### Spring Boot
+# DEVELOPMENT
+
+## Docker for Development
+Many of the micro-service code bases in SCSB have required dependencies that must be  running in order for the micro-service to event start up.   So if you want the app running in your IDE while you do development, code changes, debugging,etc... then, at a minimum, you will want to use Docker-compose to start:
+
+  * scsb-sftp
+  * scsb-mysql
+  * scsb-activemq
+  * scsb-solr-server
+
+(We should likely have a separate docker-compose for this setup)
+
+## Set up your IDE
+
+### IntelliJ
+If you don't Java, you can get 30 day trail of the commercial addition, which will save you a ton of time getting things up.
+
 Make sure you have the Spring Boot plugin installed and enabled. Navigate to `Preferences... > Plugins > Installed` to verify that Spring Boot support is listed and checked.
 
 [Follow these instructions](https://www.jetbrains.com/help/idea/gradle.html#gradle_import) to import the `scsb` repo project from its `gradle.build` file.
+
+## Development Configuration
+You will need to use a custom configuration file (application.properties) )to talk to the docker containers we've set up.  Each project will need a different configuration file, and you can specify that in the Run/Debug configuration.
+
+### Solr-Client
+Everything seems to need to SCSB Solr-Client.  After importing this project into IntelliJ, you should have a "Run Configuration" called "Main".  In the menu go to "Run" -> "Edit Configurations", select "Main", and place the following (with corrected paths) into the Environment section in the "VM Options" text field.
+
+IMPORTANT:  Edit the location to spring.config.location to point to this repository
+
+```
+-Dspring.profiles.active=local-container -Dspring.config.location=[THIS-REPO-CHECKOUT]/data/config/solr_client.application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
+```
+
+## Permission Problems
+I've run into permission problems with things getting set to root ownership on the volume shares.  If something doesn't fire up correctly you might need to chown the whole data directory. 
+
 
 ## Running unit tests
 ### Configuring IntelliJ to run tests
