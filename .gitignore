@@ -1,2 +1,4 @@
-/data/
-!/data/config/
+/data/scsb
+/data/scsb-solr-client
+/data/sftp-data
+/data/solr-data

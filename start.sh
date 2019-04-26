@@ -62,7 +62,7 @@ cd ..
 cd scsb
 docker build -t scsb-scsb . & PID_5_1=$! # Save the process ID
 pause_for 3
-docker run --name scsb --link scsb-mysql:scsb-mysql --link scsb-activemq:scsb-activemq --link scsb-solr-client:scsb-solr-client -v $DATA_DIR:/recap-vol -p 9093:9093 -e "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=""" -d scsb-scsb & PID_5_2=$! # Save the process ID
+docker run --name scsb --link scsb-mysql:scsb-mysql --link scsb-activemq:scsb-activemq --link scsb-solr-client:scsb-solr-client -v $DATA_DIR:/recap-vol -p 9093:9093 -e "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''" -d scsb-scsb & PID_5_2=$! # Save the process ID
 pause_for 3
 
 # Start shiro
