@@ -94,7 +94,7 @@ services:
     volumes:
       - ./data:/recap-vol
     environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties"
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-shiro-application.properties"
 
 #  web:
 #    build: .
