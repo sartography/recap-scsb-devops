@@ -53,7 +53,7 @@ services:
       - scsb-solr-server
       - scsb-activemq
     ports:
-      - "9091:9090"
+      - "9090:9090"
     volumes:
       - ./data:/recap-vol
     environment:
@@ -71,11 +71,30 @@ services:
       - scsb-activemq
       - scsb-solr-client
     ports:
-      - "9094:9093"
+      - "9093:9093"
     volumes:
       - ./data:/recap-vol
     environment:
       - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
+  scsb-shiro:
+    build:
+      context: ../recap-docker/scsb-shiro
+      args:
+        repo_owner: sartography
+        repo_name: recap-scsb-shiro
+        # repo_tag: master
+    depends_on:
+      - scsb-mysql
+      - scsb-solr-server
+      - scsb-activemq
+      - scsb-solr-client
+      - scsb
+    ports:
+      - "9092:9092"
+    volumes:
+      - ./data:/recap-vol
+    environment:
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/application.properties"
 
 #  web:
 #    build: .
