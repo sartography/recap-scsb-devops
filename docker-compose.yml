@@ -7,7 +7,7 @@ services:
         - "8077:8077"
     environment:
       - "OAUTH2_DISABLE_CONSENT=true"
-      - "AUTHORIZED_REDIRECT_URL=http://scsb-ui:9091"
+      - "AUTHORIZED_REDIRECT_URL=http://localhost:9091"
   scsb-sftp:
     image: atmoz/sftp
     volumes:
@@ -34,7 +34,7 @@ services:
       - "61616:61616"
       - "1099:1099"
     environment:
-      - "DB_URL=jdbc:mysql://scsb-mysql:3306/recapactivemq?relaxAutoCommit=true"
+      - "DB_URL=jdbc:mysql://localhost:3307/recapactivemq?relaxAutoCommit=true"
       - "DB_USERNAME=recap"
       - "DB_PASSWORD=recap"
       - "USERS=admin: admin, admin"
@@ -64,92 +64,4 @@ services:
     volumes:
       - ./data:/recap-vol
     environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-solr-client-application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
-  scsb:
-    build:
-      context: ../recap-docker/scsb
-      args:
-        repo_owner: sartography
-        repo_name: recap-scsb
-        # repo_tag: v1.2.5
-    depends_on:
-      - scsb-mysql
-      - scsb-solr-server
-      - scsb-activemq
-      - scsb-solr-client
-    ports:
-      - "9093:9093"
-    volumes:
-      - ./data:/recap-vol
-    environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
-  scsb-shiro:
-    build:
-      context: ../recap-docker/scsb-shiro
-      args:
-        repo_owner: sartography
-        repo_name: recap-scsb-shiro
-        # repo_tag: v1.1.6
-    depends_on:
-      - scsb-mysql
-      - scsb-solr-server
-      - scsb-activemq
-      - scsb-solr-client
-      - scsb
-    ports:
-      - "9092:9092"
-    volumes:
-      - ./data:/recap-vol
-    environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-shiro-application.properties"
-  scsb-batch-scheduler:
-    build:
-      context: ../recap-docker/scsb-batch-scheduler
-      args:
-        repo_owner: sartography
-        repo_name: recap-scsb-batch-scheduler
-        # repo_tag: v1.2.9
-    depends_on:
-      - scsb-mysql
-      - scsb-solr-server
-      - scsb-activemq
-      - scsb-solr-client
-      - scsb
-      - scsb-shiro
-    ports:
-      - "9096:9096"
-    volumes:
-      - ./data:/recap-vol
-    environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-batch-scheduler-application.properties"
-  scsb-ui:
-    build:
-      context: ../recap-docker/scsb-ui
-      args:
-        repo_owner: sartography
-        repo_name: recap-scsb-ui
-        # repo_tag: v1.2.9
-    depends_on:
-      - scsb-oauth
-      - scsb-mysql
-      - scsb-solr-server
-      - scsb-activemq
-      - scsb-solr-client
-      - scsb
-      - scsb-shiro
-    ports:
-      - "9091:9091"
-    volumes:
-      - ./data:/recap-vol
-    environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-ui-application.properties"
-
-#  web:
-#    build: .
-#    command: python manage.py runserver 0.0.0.0:8000
-#    volumes:
-#      - .:/code
-#    ports:
-#      - "8000:8000"
-#    depends_on:
-#      - db
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-solr-client.application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''"
