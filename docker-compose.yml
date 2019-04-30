@@ -1,6 +1,13 @@
 version: '3.7'
 
 services:
+  scsb-oauth:
+    image: newthings/google-oauth-mock
+    ports:
+        - "8077:8077"
+    environment:
+      - "OAUTH2_DISABLE_CONSENT=true"
+      - "AUTHORIZED_REDIRECT_URL=http://scsb-ui:9091"
   scsb-sftp:
     image: atmoz/sftp
     volumes:
@@ -95,6 +102,26 @@ services:
       - ./data:/recap-vol
     environment:
       - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-shiro-application.properties"
+  scsb-batch-scheduler:
+    build:
+      context: ../recap-docker/scsb-batch-scheduler
+      args:
+        repo_owner: sartography
+        repo_name: recap-scsb-batch-scheduler
+        # repo_tag: v1.2.9
+    depends_on:
+      - scsb-mysql
+      - scsb-solr-server
+      - scsb-activemq
+      - scsb-solr-client
+      - scsb
+      - scsb-shiro
+    ports:
+      - "9096:9096"
+    volumes:
+      - ./data:/recap-vol
+    environment:
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-batch-scheduler-application.properties"
   scsb-ui:
     build:
       context: ../recap-docker/scsb-ui
@@ -103,6 +130,7 @@ services:
         repo_name: recap-scsb-ui
         # repo_tag: v1.2.9
     depends_on:
+      - scsb-oauth
       - scsb-mysql
       - scsb-solr-server
       - scsb-activemq
