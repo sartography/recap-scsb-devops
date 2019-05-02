@@ -1,6 +1,7 @@
 /data/scsb
 /data/scsb-batch-scheduler
 /data/scsb-circ
+/data/scsb-etl
 /data/scsb-shiro
 /data/scsb-solr-client
 /data/scsb-ui
