@@ -7,6 +7,10 @@ pause_for () {
   done
 }
 
+chmod 600 /recap-vol/config/ssh_keys/id_rsa
+chmod 600 /recap-vol/config/ssh_keys/id_rsa.pub
+chmod 600 /recap-vol/config/ssh_keys/known_hosts
+
 printf "\n\n\n===================== Old containers =====================\n\n\n"
 pause_for 1
 docker container ls --all

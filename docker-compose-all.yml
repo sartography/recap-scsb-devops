@@ -101,7 +101,7 @@ services:
     volumes:
       - ./data:/recap-vol
     environment:
-      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-shiro.application.properties"
+      - "ENV=-XX:+HeapDumpOnOutOfMemoryError -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/scsb-shiro.application.properties -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*"
   scsb-batch-scheduler:
     build:
       context: ../recap-docker/scsb-batch-scheduler

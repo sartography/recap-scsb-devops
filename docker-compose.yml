@@ -1,6 +1,18 @@
 version: '3.7'
 
 services:
+  scsb-mock-ils:
+    image: jamesdbloom/mockserver:latest
+    ports:
+    - 1080:1080
+    environment:
+    - LOG_LEVEL=WARN
+  scsb-smtp:
+    image: digiplant/fake-smtp
+    ports:
+      - "1025:25"
+    volumes:
+      - ./data/email:/var/mail  
   scsb-oauth:
     image: newthings/google-oauth-mock
     ports:
