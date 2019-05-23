@@ -24,12 +24,16 @@ git clone git@github.com:sartography/recap-docker.git
 
 
 # Create some (less than ideal) directories in Root. :-(
-FIXME:  In order for some of the configration files we inherited from HTC to work correctly, we found we have to create symbolic links from `/recap-vol` and `/data` to the data directory:
+FIXME:  In order for some of the configration files we inherited from HTC to work correctly, we found we have to 
+create symbolic links from `/recap-vol` and `/data` to the data directory. First get the full path to your project 
+directory, then cd to root and create the links:
 ```bash
 cd ..
 pwd
 [PROJ_DIR]/data
-sudo ln -s [PROJ_DIR]/data /recap-vol
+
+cd /
+sudo ln -s [PROJ_DIR]/data recap-vol
 sudo ln -s [PROJ_DIR]/data data
 ```
 (we plan to fix this at some point)
@@ -84,6 +88,14 @@ Make sure you have the Spring Boot plugin installed and enabled. Navigate to `Pr
 
 ## Development Configuration
 You will need to use a custom configuration file (application.properties) )to talk to the docker containers we've set up.  Each project will need a different configuration file, and you can specify that in the Run/Debug configuration.
+In IntelliJ, after opening run > Edit Configurations, you should select JUnit in the left sidebar and set VM to the appropriate one of the following:
+```bash
+-ea -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/dev/scsb.application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''
+-ea -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/dev/scsb-batch-scheduler.application.properties
+-ea -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/dev/scsb-shiro.application.properties -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=*
+-ea -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/dev/scsb-solr-client.application.properties -Djsse.enableSNIExtension=false -Dorg.apache.activemq.SERIALIZABLE_PACKAGES=''
+-ea -Dspring.profiles.active=local-container -Dspring.config.location=/recap-vol/config/dev/scsb-ui.application.properties
+```
 
 ### Solr-Client
 Everything seems to need to SCSB Solr-Client.  After importing this project into IntelliJ, you should have a "Run Configuration" called "Main".  In the menu go to "Run" -> "Edit Configurations", select "Main", and place the following (with corrected paths) into the Environment section in the "VM Options" text field.
